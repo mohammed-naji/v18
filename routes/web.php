@@ -1,6 +1,8 @@
 
 <?php
 
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\FormController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\PagesController;
@@ -118,4 +120,24 @@ Route::get('/articles', [PagesController::class, 'articles'])->name('articles');
 // Invoke Controller
 
 // Route::resource('products', ProductController::class);
+//
+
+Route::get('/user/{name}/{age}', [PagesController::class, 'user'])->name('user.profile');
+
+
+
+Route::prefix('/blog')->name('blog.')->group(function() {
+    Route::get('/', [BlogController::class, 'index'])->name('index');
+    Route::get('/about', [BlogController::class, 'about'])->name('about');
+    Route::get('/post', [BlogController::class, 'post'])->name('post');
+    Route::get('/contact', [BlogController::class, 'contact'])->name('contact');
+});
+
+
+
+
+Route::get('form1', [FormController::class, 'form1'])->name('form1');
+Route::post('form1', [FormController::class, 'form1_data'])->name('form1_data');
+
+
 //

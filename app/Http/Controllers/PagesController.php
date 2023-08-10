@@ -30,5 +30,19 @@ class PagesController extends Controller
         return 'articles page';
     }
 
+    function user($name, $age) {
+        // return "Welcome $name your age is $age";
+
+        // return view('user.profile')
+        // ->with('name', $name)
+        // ->with('age', $age);
+
+        // return view('user.profile', [
+        //     'new_name' => $name,
+        //     'age' => $age
+        // ]);
+
+        return view('user.profile', compact('name', 'age'));
+    }
 
 }
