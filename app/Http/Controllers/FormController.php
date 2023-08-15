@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Rules\CheckWordsCount;
 use Illuminate\Http\Request;
 
 class FormController extends Controller
@@ -44,6 +45,27 @@ class FormController extends Controller
             'last_name' => 'required|min:3|max:20',
             'email' => 'required|ends_with:@gmail.com',
             'password' => 'required|confirmed'
+        ]);
+
+        dd($request->all());
+    }
+
+    function form3() {
+        return view('forms.form3');
+    }
+
+    function form3_data(Request $request) {
+        // now()->subYears(18)
+        $request->validate([
+            'name' => 'required|min:3',
+            'email' => 'required',
+            'dob' => 'required|before:-18 years',
+            'gender' => 'required',
+            'education_level' => 'required',
+            'hobbies' => 'required',
+            'bio' => ['required', new CheckWordsCount(20)],
+        ], [
+            'name.required' => 'الحقل مطلووووووب'
         ]);
 
         dd($request->all());
