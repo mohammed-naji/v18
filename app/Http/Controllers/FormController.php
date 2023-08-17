@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContactUsMail;
+use App\Mail\TestMail;
 use App\Rules\CheckWordsCount;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class FormController extends Controller
 {
@@ -13,7 +16,7 @@ class FormController extends Controller
 
     function form1_data(Request $request) {
         // dd($_POST);
-        // dd($request->all());
+        dd($request->all());
         // dd($request->except('_token'));
         // dd($request->only('_token', 'email'));
 
@@ -71,4 +74,76 @@ class FormController extends Controller
         dd($request->all());
     }
 
+    function form4() {
+        return view('forms.form4');
+    }
+
+    function form4_data(Request $request) {
+        $request->validate([
+            'name' => 'required',
+            'image' => ['required']
+        ]);
+
+        // dd($request->all());
+        // mkdir()
+        // $imgname = rand().time(). $request->file('image')->getClientOriginalName();
+        $foledername = date('Y').'/'.date('m');
+        foreach($request->image as $img) {
+            $ex = $img->getClientOriginalExtension();
+            $imgname = rand(0000000, 9999999).rand().'_'.rand().rand().rand().'_'.rand().'.'.$ex;
+            $img->move(public_path('images/'.$foledername), $imgname);
+        }
+    }
+
+    function contact() {
+        return view('forms.contact');
+    }
+
+    function contact_data(Request $request) {
+        // dd($request->all());
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'subject' => 'required',
+            'image' => 'nullable|image|mimes:png,jpg',
+            'message' => 'required',
+        ]);
+
+        $data = $request->except('_token', 'image');
+
+        if ($request->hasFile('image')){
+            $imgname = rand().time().$request->file('image')->getClientOriginalName();
+            $request->file('image')->move(public_path('images'), $imgname);
+            $data['image'] = $imgname;
+        }
+
+        // dd($data);
+
+        Mail::to('mustafa.diouck2004@gmail.com')->send(new ContactUsMail($data));
+    }
 }
+
+
+// domain => mohamednaji.com
+// subdomain => test.mohamednaji.com
+// subfolder => mohamednaji.com/test
+
+//
+
+
+// abc.png
+
+// explode('.', 'abc.ddfds.rewr.png')
+// $path = ['abc', 'png'];
+// // $ex = $path[ count($path) - 1 ];
+// $ex = end($path);
+
+// mail();
+// smtp
+
+// gmail.com
+
+// mailtrap
+
+//
