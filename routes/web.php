@@ -2,6 +2,7 @@
 <?php
 
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\FormController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
@@ -150,5 +151,25 @@ Route::post('form4', [FormController::class, 'form4_data'])->name('form4_data');
 
 Route::get('contact', [FormController::class, 'contact'])->name('contact');
 Route::post('contact', [FormController::class, 'contact_data'])->name('contact_data');
+
+
+
+// // Course All Routes
+// // get all data
+// Route::get('courses', [CourseController::class, 'index'])->name('courses.index');
+// Route::get('courses/{course}', [CourseController::class, 'show'])->name('courses.show');
+
+// // create routes
+// Route::get('/courses/create', [CourseController::class, 'create'])->name('courses.create');
+// Route::post('/courses', [CourseController::class, 'store'])->name('courses.store');
+
+// // update routes
+// Route::get('/courses/{course}/edit', [CourseController::class, 'edit'])->name('courses.edit');
+// Route::match(['put', 'patch'],'/courses/{course}', [CourseController::class, 'update'])->name('courses.update');
+
+// // delete route
+// Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
+
+Route::resource('courses', CourseController::class);
 
 //
