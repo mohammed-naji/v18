@@ -51,7 +51,7 @@ class CourseController extends Controller
      */
     public function create()
     {
-        //
+        return view('courses.create');
     }
 
     /**
@@ -59,7 +59,44 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+
+        // validation
+        $request->validate([
+            'name' => 'required',
+            'image' => 'required|image|mimes:png,jpg',
+            'content' => 'required',
+            'price' => 'required|numeric',
+            'hours' => 'required|numeric',
+        ]);
+
+        // upload files
+        $img_name = time().rand().$request->file('image')->getClientOriginalName();
+        $request->file('image')->move(public_path('images'), $img_name);
+        // abc.png => 655465465717982797abc.png
+
+        // store in database
+        // 1. Using Model Object
+        // $course = new Course();
+        // $course->name    = $request->name;
+        // $course->image   = $img_name;
+        // $course->content = $request->content;
+        // $course->price   = $request->price;
+        // $course->hours   = $request->hours;
+        // $course->save();
+        // INSERT INTO courses (name, image) VALUES ('', '')
+
+        // 2. Using Model Method
+        Course::create([
+            'name' => $request->name,
+            'image' => $img_name,
+            'content' => $request->content,
+            'price' => $request->price,
+            'hours' => $request->hours,
+        ]);
+
+        // redirect to another route
+        return redirect()->route('courses.index');
     }
 
     /**
@@ -96,4 +133,27 @@ class CourseController extends Controller
 
         return redirect()->route('courses.index');
     }
+
+    function trash() {
+        $courses = Course::onlyTrashed()->latest('deleted_at')->paginate(10);
+
+        return view('courses.trash', compact('courses'));
+    }
+
+    function restore($id) {
+        $course = Course::onlyTrashed()->find($id)->restore(); // Select * from courses where id = $id
+
+        // return redirect()->back();
+        return redirect()->route('courses.index');
+    }
+
+    function forcedelete($id) {
+        $course = Course::onlyTrashed()->find($id)->forcedelete(); // Select * from courses where id = $id
+
+        // return redirect()->back();
+        return redirect()->route('courses.index');
+    }
 }
+
+
+//

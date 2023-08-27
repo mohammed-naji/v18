@@ -39,6 +39,10 @@
 
         <h1 class="text-center mb-4">All Courses</h1>
 
+        <div class="d-flex justify-content-between">
+            <a href="{{ route('courses.trash') }}" class="btn btn-danger mb-3"><i class="fas fa-trash"></i> Trashed Courses</a>
+            <a href="{{ route('courses.create') }}" class="btn btn-success mb-3"><i class="fas fa-plus"></i> Add new Course</a>
+        </div>
 
             <form class="mx-2" action="{{ route('courses.index') }}" method="GET">
                 @if (request()->has('page'))
@@ -88,7 +92,7 @@
             @foreach ($courses as $course)
             <tr>
                 <td>{{ $course->id }}</td>
-                <td><img width="100" src="{{ $course->image }}" alt=""></td>
+                <td><img width="100" src="{{ asset('images/'.$course->image) }}" alt=""></td>
                 <td>{{ $course->name }}</td>
                 <td>${{ $course->price }}</td>
                 <td>{{ $course->hours }}</td>

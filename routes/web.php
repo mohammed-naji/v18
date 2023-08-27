@@ -170,6 +170,9 @@ Route::post('contact', [FormController::class, 'contact_data'])->name('contact_d
 // // delete route
 // Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
 
+Route::get('/courses/trash', [CourseController::class, 'trash'])->name('courses.trash');
+Route::get('/courses/{course}/restore', [CourseController::class, 'restore'])->name('courses.restore');
+Route::delete('/courses/{course}/forcedelete', [CourseController::class, 'forcedelete'])->name('courses.forcedelete');
 Route::resource('courses', CourseController::class);
 
 //
