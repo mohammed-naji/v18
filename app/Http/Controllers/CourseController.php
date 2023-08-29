@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class CourseController extends Controller
 {
@@ -87,16 +88,15 @@ class CourseController extends Controller
         // INSERT INTO courses (name, image) VALUES ('', '')
 
         // 2. Using Model Method
-        Course::create([
-            'name' => $request->name,
-            'image' => $img_name,
-            'content' => $request->content,
-            'price' => $request->price,
-            'hours' => $request->hours,
-        ]);
+        $data = $request->except('_token', 'image');
+        $data['image'] = $img_name;
+        Course::create($data);
 
         // redirect to another route
-        return redirect()->route('courses.index');
+        return redirect()
+        ->route('courses.index')
+        ->with('msg', 'Course created successfully')
+        ->with('type', 'success');
     }
 
     /**
@@ -110,9 +110,15 @@ class CourseController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        // $course = Course::find($id); // select * from courses where id = $id;
+        // if(!$course) {
+        //     abort(404);
+        // }
+        $course = Course::findOrFail($id);
+        // dd($course->name);
+        return view('courses.edit', compact('course'));
     }
 
     /**
@@ -120,7 +126,35 @@ class CourseController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // validation
+        $request->validate([
+            'name' => 'required',
+            'image' => 'nullable|image|mimes:png,jpg',
+            'content' => 'required',
+            'price' => 'required|numeric',
+            'hours' => 'required|numeric',
+        ]);
+
+        $course = Course::findOrFail($id);
+        $data = $request->except('_token', 'image');
+
+        if($request->hasFile('image')) {
+            File::delete(public_path('images/'.$course->image));
+            // upload files
+            $img_name = time().rand().$request->file('image')->getClientOriginalName();
+            $request->file('image')->move(public_path('images'), $img_name);
+            $data['image'] = $img_name;
+        }
+
+        // 2. Using Model Method
+
+        $course->update($data);
+
+        // redirect to another route
+        return redirect()
+        ->route('courses.index')
+        ->with('msg', 'Course updated successfully')
+        ->with('type', 'success');
     }
 
     /**
@@ -131,7 +165,10 @@ class CourseController extends Controller
         // DELETE FROM courses WHERE id = $id
         Course::destroy($id);
 
-        return redirect()->route('courses.index');
+        return redirect()
+        ->route('courses.index')
+        ->with('msg', 'Course deleted successfully')
+        ->with('type', 'error');
     }
 
     function trash() {
@@ -148,8 +185,9 @@ class CourseController extends Controller
     }
 
     function forcedelete($id) {
-        $course = Course::onlyTrashed()->find($id)->forcedelete(); // Select * from courses where id = $id
-
+        $course = Course::onlyTrashed()->find($id); // Select * from courses where id = $id
+        File::delete(public_path('images/'.$course->image));
+        $course->forceDelete();
         // return redirect()->back();
         return redirect()->route('courses.index');
     }
