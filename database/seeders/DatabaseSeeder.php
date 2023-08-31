@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use App\Models\Course;
+use App\Models\Profile;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,7 +16,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Category::factory(1000)->create();
+        Profile::factory(5)->create();
+        // Category::factory(1000)->create();
         // $this->call(CourseSeeder::class);
         // Course::factory(100)->create();
         // \App\Models\User::factory(10)->create();

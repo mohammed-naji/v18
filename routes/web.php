@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RelationController;
 
 // use , namespace
 
@@ -174,5 +175,12 @@ Route::get('/courses/trash', [CourseController::class, 'trash'])->name('courses.
 Route::get('/courses/{course}/restore', [CourseController::class, 'restore'])->name('courses.restore');
 Route::delete('/courses/{course}/forcedelete', [CourseController::class, 'forcedelete'])->name('courses.forcedelete');
 Route::resource('courses', CourseController::class);
+
+
+
+
+// Relations Route
+Route::get('users', [RelationController::class, 'users'])->name('relation.users');
+Route::get('profile/{id}', [RelationController::class, 'profile'])->name('relation.profile');
 
 //

@@ -42,4 +42,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    function profile() {
+        return $this->hasOne(Profile::class, 'u_id', 'id')->withDefault([
+            'fb' => '-'
+        ]);
+    }
 }
