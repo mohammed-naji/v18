@@ -183,4 +183,7 @@ Route::resource('courses', CourseController::class);
 Route::get('users', [RelationController::class, 'users'])->name('relation.users');
 Route::get('profile/{id}', [RelationController::class, 'profile'])->name('relation.profile');
 
+Route::get('posts', [RelationController::class, 'posts'])->name('relation.posts');
+Route::get('posts/{id}', [RelationController::class, 'posts_single'])->name('relation.posts_single');
+Route::get('posts/tag/{id}', [RelationController::class, 'posts_tag'])->name('relation.posts_tag');
 //

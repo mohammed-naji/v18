@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tag extends Model
+class Comment extends Model
 {
     use HasFactory;
 
-    function posts() {
-        return $this->belongsToMany(Post::class);
+    function user() {
+        return $this->belongsTo(User::class)->withDefault();
     }
 }
